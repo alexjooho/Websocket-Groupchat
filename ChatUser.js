@@ -2,6 +2,8 @@
 
 /** Functionality related to chatting. */
 
+const axios = require("axios");
+
 // Room is an abstraction of a chat channel
 const Room = require("./Room");
 
@@ -61,12 +63,23 @@ class ChatUser {
       text: text,
     });
   }
-  
-  handleJoke() {
+
+  async handleJoke() {
+    let resp = await axios.get("https://icanhazdadjoke.com/", {
+      headers: {
+        Accept: "application/json",
+        "User-Agent": "hello",
+      },
+    });
+
+    console.log("resp: ", resp);
+
+    let joke = resp.data.joke;
+
     this.room.singleMessage(this, {
       name: this.name,
       type: "get-joke",
-      text: "Clowns!",
+      text: joke,
     });
   }
 
